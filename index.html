@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowrdesk - Smart support, effortless flow.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        window.onload = function() {
+            const form = document.getElementById('waitlist-form');
+            const statusMessage = document.getElementById('status-message');
+            
+            // Accessing environment variables from Vite's import.meta.env
+            const serviceId = "service_sdael";
+            const templateId = "template_sdael";
+            const publicKey = "ydhAskNh7nYd8zyp6";
+            
+            emailjs.init(publicKey);
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                statusMessage.textContent = 'Submitting...';
+                
+                emailjs.sendForm(serviceId, templateId, this)
+                    .then(function() {
+                        statusMessage.textContent = 'Thank you for your interest! We\'ll be in touch.';
+                        statusMessage.classList.remove('text-red-600', 'bg-red-100', 'dark:text-red-300', 'dark:bg-red-900');
+                        statusMessage.classList.add('text-green-600', 'bg-green-100', 'dark:text-green-300', 'dark:bg-green-900');
+                        form.reset();
+                    }, function(error) {
+                        console.log('FAILED...', error);
+                        statusMessage.textContent = 'Failed to submit. Please try again.';
+                        statusMessage.classList.remove('text-green-600', 'bg-green-100', 'dark:text-green-300', 'dark:bg-green-900');
+                        statusMessage.classList.add('text-red-600', 'bg-red-100', 'dark:text-red-300', 'dark:bg-red-900');
+                    });
+            });
+        };
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white;
+        }
+        .bg-dark-blue {
+            background-color: #0d1222;
+        }
+        .input-form-bg {
+            background-color: rgba(42, 48, 68, 0.5); /* Semi-transparent */
+            backdrop-filter: blur(10px);
+        }
+        .btn-gradient {
+            background: linear-gradient(to right, #2563eb, #1e40af);
+        }
+        .glow-effect {
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.6), 0 0 20px rgba(30, 64, 175, 0.4);
+        }
+        .hero-bg {
+            background: linear-gradient(to right, #0d1222, #181c31);
+            position: relative;
+            overflow: hidden;
+        }
+        .glowing-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background-image: url('https://res.cloudinary.com/dtstdesr9/image/upload/v1757072846/background.png_x0alqs.png');
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Hero Section -->
+    <section class="hero-bg w-full py-24 lg:py-48 relative text-white">
+        <div class="glowing-lines"></div>
+        <div class="relative z-10 container px-4 md:px-6 mx-auto flex flex-col items-center justify-center text-center">
+            <div class="space-y-6">
+                <div class="flex flex-col items-center mb-4">
+                    <img src="https://res.cloudinary.com/dtstdesr9/image/upload/v1757117396/logo6_kaxosu.png" alt="Flowrdesk Logo" class="h-1/2 w-1/2 max-h-64 max-w-64">
+                </div>
+                <h1 class="text-4xl font-bold tracking-tight sm:text-5xl xl:text-6xl">
+                    Smart support, effortless flow.
+                </h1>
+                <p class="max-w-2xl text-lg text-gray-300 mx-auto">
+                    Empowering your workflow with intelligent solutions and seamless connections.
+                </p>
+                <form id="waitlist-form" class="mt-8 mx-auto max-w-lg p-6 rounded-xl shadow-lg input-form-bg">
+                    <div class="flex flex-col space-y-4">
+                        <input id="firstName" name="firstName" type="text" placeholder="First Name" required class="px-4 py-3 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors input-form-bg text-white placeholder-gray-400 w-full" />
+                        <input id="email" name="email" type="email" placeholder="Email" required class="px-4 py-3 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors input-form-bg text-white placeholder-gray-400 w-full" />
+                        <select id="userCount" name="userCount" required class="px-4 py-3 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors input-form-bg text-white w-full">
+                            <option value="" disabled selected>Select User Count</option>
+                            <option value="1-5">1-5</option>
+                            <option value="6-10">6-10</option>
+                            <option value="11-20">11-20</option>
+                            <option value="21-50">21-50</option>
+                            <option value="50+">50+</option>
+                        </select>
+                        <button type="submit" class="w-full px-6 py-3 rounded-lg text-white font-medium btn-gradient transition-colors hover:opacity-90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 glow-effect">
+                            Request Early Access
+                        </button>
+                    </div>
+                    <div id="status-message" class="mt-4 text-center text-sm" role="status"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="w-full py-6 bg-dark-blue text-gray-400">
+        <div class="container flex flex-col items-center justify-between gap-2 px-4 md:flex-row md:px-6 mx-auto">
+            <p class="text-sm">© 2025 Flowrdesk. All rights reserved.</p>
+            <div class="flex gap-4">
+                <!-- No links -->
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
