@@ -3,122 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flowrdesk - Smart support, effortless flow.</title>
+    <title>Flowrdesk - HLTTS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script type="text/javascript">
         window.onload = function() {
             const form = document.getElementById('waitlist-form');
             const statusMessage = document.getElementById('status-message');
-            
-            // Accessing environment variables from Vite's import.meta.env
+            const ticketingSelect = document.getElementById('ticketingSystem');
+            const otherField = document.getElementById('otherTicketing');
+
+            ticketingSelect.addEventListener('change', function() {
+                if (this.value === 'Other') {
+                    otherField.style.display = 'block';
+                    otherField.required = true;
+                } else {
+                    otherField.style.display = 'none';
+                    otherField.required = false;
+                    otherField.value = '';
+                }
+            });
+
             const serviceId = "service_sdael";
             const templateId = "template_sdael";
             const publicKey = "ydhAskNh7nYd8zyp6";
-            
+
             emailjs.init(publicKey);
 
             form.addEventListener('submit', function(event) {
                 event.preventDefault();
-                
-                statusMessage.textContent = 'Submitting...';
-                
+                const btn = document.getElementById('submit-btn');
+                btn.textContent = 'Submitting...';
+                btn.disabled = true;
+                statusMessage.textContent = '';
+
                 emailjs.sendForm(serviceId, templateId, this)
                     .then(function() {
-                        statusMessage.textContent = 'Thank you for your interest! We\'ll be in touch.';
-                        statusMessage.classList.remove('text-red-600', 'bg-red-100', 'dark:text-red-300', 'dark:bg-red-900');
-                        statusMessage.classList.add('text-green-600', 'bg-green-100', 'dark:text-green-300', 'dark:bg-green-900');
+                        statusMessage.textContent = "You're on the list! We'll be in touch soon.";
+                        statusMessage.classList.remove('text-red-400');
+                        statusMessage.classList.add('text-green-400');
+                        btn.textContent = 'Request Early Access';
+                        btn.disabled = false;
                         form.reset();
+                        otherField.style.display = 'none';
                     }, function(error) {
                         console.log('FAILED...', error);
-                        statusMessage.textContent = 'Failed to submit. Please try again.';
-                        statusMessage.classList.remove('text-green-600', 'bg-green-100', 'dark:text-green-300', 'dark:bg-green-900');
-                        statusMessage.classList.add('text-red-600', 'bg-red-100', 'dark:text-red-300', 'dark:bg-red-900');
+                        statusMessage.textContent = 'Something went wrong. Please try again.';
+                        statusMessage.classList.remove('text-green-400');
+                        statusMessage.classList.add('text-red-400');
+                        btn.textContent = 'Request Early Access';
+                        btn.disabled = false;
                     });
             });
         };
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white;
-        }
-        .bg-dark-blue {
-            background-color: #0d1222;
-        }
-        .input-form-bg {
-            background-color: rgba(42, 48, 68, 0.5); /* Semi-transparent */
-            backdrop-filter: blur(10px);
-        }
-        .btn-gradient {
-            background: linear-gradient(to right, #2563eb, #1e40af);
-        }
-        .glow-effect {
-            box-shadow: 0 0 15px rgba(37, 99, 235, 0.6), 0 0 20px rgba(30, 64, 175, 0.4);
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #0d1222; color: white; }
+        h1, h2, h3 { font-family: 'Sora', sans-serif; }
         .hero-bg {
-            background: linear-gradient(to right, #0d1222, #181c31);
+            background: linear-gradient(135deg, #0d1222 0%, #181c31 100%);
             position: relative;
             overflow: hidden;
         }
         .glowing-lines {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%; z-index: 0;
             background-image: url('https://res.cloudinary.com/dtstdesr9/image/upload/v1757072846/background.png_x0alqs.png');
             opacity: 0.3;
         }
+        .input-form-bg { background-color: rgba(42, 48, 68, 0.6); backdrop-filter: blur(12px); }
+        .btn-gradient { background: linear-gradient(to right, #2563eb, #1e40af); transition: opacity 0.2s ease; }
+        .btn-gradient:hover { opacity: 0.9; }
+        .btn-gradient:disabled { opacity: 0.6; cursor: not-allowed; }
+        .glow-effect { box-shadow: 0 0 15px rgba(37, 99, 235, 0.6), 0 0 30px rgba(30, 64, 175, 0.3); }
+        .card-bg { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; }
+        select option { background-color: #1e2540; color: white; }
+        .badge {
+            background: rgba(37, 99, 235, 0.2);
+            border: 1px solid rgba(37, 99, 235, 0.4);
+            color: #93c5fd;
+            font-size: 0.75rem; font-weight: 600;
+            padding: 4px 12px; border-radius: 100px;
+            display: inline-block; margin-bottom: 16px;
+            letter-spacing: 0.05em; text-transform: uppercase;
+        }
+        #otherTicketing { display: none; animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="antialiased">
+
     <!-- Hero Section -->
-    <section class="hero-bg w-full py-24 lg:py-48 relative text-white">
+    <section class="hero-bg w-full min-h-screen relative text-white flex items-center">
         <div class="glowing-lines"></div>
-        <div class="relative z-10 container px-4 md:px-6 mx-auto flex flex-col items-center justify-center text-center">
-            <div class="space-y-6">
-                <div class="flex flex-col items-center mb-4">
-                    <img src="https://res.cloudinary.com/dtstdesr9/image/upload/v1757117396/logo6_kaxosu.png" alt="Flowrdesk Logo" class="h-1/2 w-1/2 max-h-64 max-w-64">
+        <div class="relative z-10 container px-4 md:px-6 mx-auto flex flex-col items-center justify-center text-center py-24">
+            <div class="space-y-6 max-w-3xl mx-auto">
+
+                <!-- Logo -->
+                <div class="flex flex-col items-center mb-6">
+                    <img src="https://res.cloudinary.com/dtstdesr9/image/upload/v1757117396/logo6_kaxosu.png" alt="Flowrdesk Logo" class="max-h-40 max-w-40">
                 </div>
-                <h1 class="text-4xl font-bold tracking-tight sm:text-5xl xl:text-6xl">
-                    Smart support, effortless flow.
+
+                <!-- Badge -->
+                <div class="badge">Introducing HLTTS by Flowrdesk</div>
+
+                <!-- Headline -->
+                <h1 class="text-4xl font-bold tracking-tight sm:text-5xl xl:text-6xl leading-tight">
+                    A senior support engineer<br/>on every ticket.
                 </h1>
-                <p class="max-w-2xl text-lg text-gray-300 mx-auto">
-                    Empowering your workflow with intelligent solutions and seamless connections.
+
+                <!-- Subheadline -->
+                <p class="max-w-2xl text-lg text-gray-300 mx-auto leading-relaxed">
+                    HLTTS gives your support team the ability to diagnose problems the way a senior engineer would — and delivers a detailed report so your engineering team can start investigating immediately instead of starting from zero.
                 </p>
-                <form id="waitlist-form" class="mt-8 mx-auto max-w-lg p-6 rounded-xl shadow-lg input-form-bg">
+
+                <!-- Compatible with line -->
+                <p class="text-sm text-blue-400 font-medium">
+                    Works with your existing ticketing system
+                </p>
+
+                <!-- Two benefit callouts -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mt-4">
+                    <div class="card-bg px-6 py-4 text-left max-w-xs">
+                        <p class="text-white font-semibold text-sm mb-1">For Support Teams</p>
+                        <p class="text-gray-400 text-sm">Step by step guidance to diagnose and document any bug — no senior engineer required.</p>
+                    </div>
+                    <div class="card-bg px-6 py-4 text-left max-w-xs">
+                        <p class="text-white font-semibold text-sm mb-1">For Engineering Teams</p>
+                        <p class="text-gray-400 text-sm">Receive a detailed investigation report ready to act on — not a vague ticket to decode.</p>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <form id="waitlist-form" class="mt-8 mx-auto max-w-lg p-6 rounded-2xl shadow-xl input-form-bg text-left">
+                    <p class="text-center text-white font-semibold text-lg mb-2">Request Early Access</p>
+                    <p class="text-center text-gray-400 text-sm mb-5">We're onboarding a limited number of founding customers. No commitment required.</p>
                     <div class="flex flex-col space-y-4">
-                        <input id="firstName" name="firstName" type="text" placeholder="First Name" required class="px-4 py-3 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors input-form-bg text-white placeholder-gray-400 w-full" />
-                        <input id="email" name="email" type="email" placeholder="Email" required class="px-4 py-3 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors input-form-bg text-white placeholder-gray-400 w-full" />
-                        <select id="userCount" name="userCount" required class="px-4 py-3 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors input-form-bg text-white w-full">
-                            <option value="" disabled selected>Select User Count</option>
-                            <option value="1-5">1-5</option>
-                            <option value="6-10">6-10</option>
-                            <option value="11-20">11-20</option>
-                            <option value="21-50">21-50</option>
-                            <option value="50+">50+</option>
+                        <input
+                            id="firstName" name="firstName"
+                            type="text" placeholder="First Name" required
+                            class="px-4 py-3 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 input-form-bg text-white placeholder-gray-400 w-full"
+                        />
+                        <input
+                            id="email" name="email"
+                            type="email" placeholder="Work Email" required
+                            class="px-4 py-3 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 input-form-bg text-white placeholder-gray-400 w-full"
+                        />
+                        <select
+                            id="userCount" name="userCount" required
+                            class="px-4 py-3 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 input-form-bg text-white w-full"
+                        >
+                            <option value="" disabled selected>Number of Support Users</option>
+                            <option value="1-5">1–5 users</option>
+                            <option value="6-10">6–10 users</option>
+                            <option value="11-20">11–20 users</option>
+                            <option value="21-50">21–50 users</option>
+                            <option value="50+">50+ users</option>
                         </select>
-                        <button type="submit" class="w-full px-6 py-3 rounded-lg text-white font-medium btn-gradient transition-colors hover:opacity-90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 glow-effect">
+                        <select
+                            id="ticketingSystem" name="ticketingSystem" required
+                            class="px-4 py-3 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 input-form-bg text-white w-full"
+                        >
+                            <option value="" disabled selected>Current Ticketing System</option>
+                            <option value="Zendesk">Zendesk</option>
+                            <option value="Jira">Jira</option>
+                            <option value="Freshdesk">Freshdesk</option>
+                            <option value="Linear">Linear</option>
+                            <option value="Intercom">Intercom</option>
+                            <option value="ServiceNow">ServiceNow</option>
+                            <option value="HubSpot">HubSpot Service Hub</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <input
+                            id="otherTicketing" name="otherTicketing"
+                            type="text" placeholder="Please tell us which system you use"
+                            class="px-4 py-3 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 input-form-bg text-white placeholder-gray-400 w-full"
+                        />
+                        <button
+                            id="submit-btn" type="submit"
+                            class="w-full px-6 py-3 rounded-lg text-white font-semibold btn-gradient glow-effect"
+                        >
                             Request Early Access
                         </button>
                     </div>
-                    <div id="status-message" class="mt-4 text-center text-sm" role="status"></div>
+                    <div id="status-message" class="mt-4 text-center text-sm font-medium" role="status"></div>
                 </form>
+
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="w-full py-6 bg-dark-blue text-gray-400">
+    <footer class="w-full py-6 text-gray-500" style="background-color: #0a0f1e; border-top: 1px solid rgba(255,255,255,0.06);">
         <div class="container flex flex-col items-center justify-between gap-2 px-4 md:flex-row md:px-6 mx-auto">
-            <p class="text-sm">© 2025 Flowrdesk. All rights reserved.</p>
-            <div class="flex gap-4">
-                <!-- No links -->
-            </div>
+            <p class="text-sm">© 2026 Flowrdesk. All rights reserved.</p>
+            <p class="text-sm">HLTTS — High Level Technical Triage Support</p>
         </div>
     </footer>
+
 </body>
 </html>
